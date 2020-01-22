@@ -1,0 +1,46 @@
+@extends('layouts.app')
+
+@section('title', 'All loans')
+
+@section('content')
+<table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Room</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach($loans as $loan)
+        <tr data-href="{{ route('loans.showoredit', $loan->id) }}">
+            <td>{{ config('app.conventions.loan_prefix') }}{{ $loan->id }}</td>
+            <td>{{ $loan->borrower_name }}</td>
+            <td>{{ $loan->borrower_room }}</td>
+            <td>{{ $loan->getStatus() }}</td>
+        </tr>
+@endforeach
+    </tbody>
+</table>
+
+<script>
+    /*
+     * Make whole row clickable by adding data-href attribute to it
+     */
+$(function(){
+    $('.table tr[data-href]').each(function(){
+        $(this).css('cursor','pointer').hover(
+            function(){ 
+                $(this).addClass('active'); 
+            },  
+            function(){ 
+                $(this).removeClass('active'); 
+            }).click( function(){ 
+                document.location = $(this).attr('data-href'); 
+            }
+        );
+    });
+});
+</script>
+@endsection
