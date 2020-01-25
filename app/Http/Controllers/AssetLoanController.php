@@ -41,19 +41,31 @@ class AssetLoanController extends Controller
      */
     public function store(Request $request)
     {
+        $request->flash(); // make old flash data available to the next page again
+        
         $validatedData = $request->validate([
             'loan_id' => 'required|integer',
-            'asset_id' => 'required|integer',
+            'asset_search' => 'nullable',
         ]);
         
+        // find loan
         $loan = Loan::find($validatedData['loan_id']);
         if ($loan->isImmutable()) {
             throw new \Exception('Cannot delete assets from this loan because it\'s immutable');
         }
         
-        $loan->assets()->attach($validatedData['asset_id']); // attach an asset to a loan
+        // find asset
+        try {
+            $assetname = Assetname::where('name', '=', $validatedData['asset_search'])
+                    ->firstOrFail();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return back()->with('no_asset_found', 'message is written in view');
+        }
         
-        return redirect()->route('loans.edit', $loan->id);
+        // we got all information, now attach the asset to the loan
+        $loan->assets()->attach($assetname->asset_id); // attach an asset to a loan
+        
+        return back();
     }
 
     /**

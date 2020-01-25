@@ -3,6 +3,8 @@
 @section('title', 'All loans')
 
 @section('content')
+<h3>Recent loans</h3>
+<h5>ordered by modification date</h5>
 <table class="table table-striped table-sm">
     <thead>
         <tr>

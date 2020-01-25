@@ -20,7 +20,7 @@ class LoanController extends Controller
      */
     public function index()
     {
-        $loans = Loan::all();
+        $loans = Loan::orderBy('updated_at', 'desc')->get();
         return view('loan.index', [
             'loans' => $loans,
         ]);
@@ -80,30 +80,15 @@ class LoanController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $assetSearchString = $request->validate([
-            'asset_search' => 'nullable',
-        ]);
-        
         $loan = Loan::find($id);
         // for now, if the loan is immutable, just redirect to @show
         if ($loan->isImmutable()) {
             return redirect()->route('loans.show', $id);
         }
         
-        /*
-         * Results can be accessed like
-         * $assetSearchResult[0]->asset->id
-         */
-        if (!empty($assetSearchString)) {
-            $assetSearchResult = Assetname::where('name', '=', $assetSearchString)->get();
-        } else {
-            $assetSearchResult = [];
-        }
-        
         return view('loan.edit', [
             'loan' => $loan,
             'allAssetnames' => Assetname::all(),
-            'assetSearchResult' => $assetSearchResult,
         ]);
     }
 

@@ -79,9 +79,20 @@
     No assets are part of this transaction yet. Please add some below.
 </div>
 @endforelse
+<br>
 
 <h5>Add asset</h5>
-<form method="get" action="#" class="form-inline">
+@if (session('no_asset_found'))
+<div class="alert alert-warning">
+    <p>Could not find asset called {{ old('asset_search') }}. Please make sure
+        you pick one of the names from the suggestions.</p>
+    <p>If you do not see suggestions, try using another (up to date) browser.</p>
+</div>
+@endif
+<form method="post" action="{{ route('assetsloans.store') }}" class="form-inline">
+    @csrf
+    <input type="hidden" name="loan_id" value="{{ $loan->id }}">
+    
     <div class="form-group mb-2">
         <datalist id="list_asset_names">
             @foreach($allAssetnames as $name)
@@ -91,25 +102,8 @@
         <input type="search" class="form-control" id="asset_search"
                list="list_asset_names" name="asset_search"
                placeholder="Asset name ..."
-               value="{{ request()->input('asset_search') }}">
+               value="{{ old('asset_search') }}">
     </div>
-    <button type="submit" class="btn btn-primary mb-2">Search</button>
-</form>
-
-<h5>Search results</h5>
-<form method="post" action="{{ route('assetsloans.store') }}">
-    @csrf
-    <input type="hidden" name="loan_id" value="{{ $loan->id }}">
-    
-    @forelse($assetSearchResult as $result)
-    <div class="border">
-        {{ $result->name }}
-        <button type="submit" class="btn btn-primary" name="asset_id" value="{{ $result->asset_id }}">Add</button>
-    </div>
-    @empty
-    <div class="alert alert-info">
-        Nothing found or nothing searched.
-    </div>
-    @endforelse
+    <button type="submit" class="btn btn-primary mb-2">Add</button>
 </form>
 @endsection
