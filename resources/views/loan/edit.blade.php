@@ -9,11 +9,15 @@
     @method('PUT')
     <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" name="borrower_name" value="{{ $loan->borrower_name }}">
+        <input type="text" class="form-control" id="name" name="borrower_name" value="{{ $loan->borrower_name }}" required>
     </div>
     <div class="form-group">
         <label for="room">Room (e.g. 104)</label>
-        <input type="number" class="form-control" id="room" name="borrower_room" value="{{ $loan->borrower_room }}">
+        <input type="number" class="form-control" id="room" name="borrower_room" value="{{ $loan->borrower_room }}" required>
+    </div>
+    <div class="form-group">
+        <label for="email">E-Mail (used to send confirmation)</label>
+        <input type="email" class="form-control" id="email" name="borrower_email" value="{{ $loan->borrower_email }}" required>
     </div>
     <div class="form-group">
         <label for="comment">Comment</label>
@@ -102,7 +106,7 @@
         <input type="search" class="form-control" id="asset_search"
                list="list_asset_names" name="asset_search"
                placeholder="Asset name ..."
-               value="{{ old('asset_search') }}">
+               value="{{ session('no_asset_found') ? old('asset_search') : '' }}">
     </div>
     <button type="submit" class="btn btn-primary mb-2">Add</button>
 </form>

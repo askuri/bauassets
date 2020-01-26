@@ -8,14 +8,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class LoanGiven extends Mailable
+class LoanReturned extends Mailable
 {
     use Queueable, SerializesModels;
-    
-    /**
-     * This gets passed automatically to the email view.
-     * @var App\Loan
-     */
+
     public $loan;
 
     /**
@@ -35,7 +31,7 @@ class LoanGiven extends Mailable
      */
     public function build()
     {
-        return $this->subject('Leihgabe erhalten / Loan given')
-                ->markdown('emails.LoanGiven');
+        return $this->subject('Leihgabe zurückgegeben / Loan returned')
+                ->markdown('emails.LoanReturned');
     }
 }

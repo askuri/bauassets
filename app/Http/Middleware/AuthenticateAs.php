@@ -1,5 +1,6 @@
 <?php
 /**
+ * @deprecated since 2020-01-26. replaced by policies
  * Used to make sure a user is authenticated with a specific role.
  * This replaces the "auth" middleware.
  * Can be used like 

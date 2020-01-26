@@ -50,9 +50,9 @@ class AssetLoanController extends Controller
         
         // find loan
         $loan = Loan::find($validatedData['loan_id']);
-        if ($loan->isImmutable()) {
-            throw new \Exception('Cannot delete assets from this loan because it\'s immutable');
-        }
+        
+        // restrict to authorized users, also checks if it's immutable
+        $this->authorize('attachAsset', $loan);
         
         // find asset
         try {
@@ -115,6 +115,10 @@ class AssetLoanController extends Controller
         ]);
         
         $loan = Loan::find($validatedData['loan_id']);
+        
+        // restrict to authorized users, also checks if it's immutable
+        $this->authorize('detachAsset', $loan);
+        
         $loan->assets()->detach($validatedData['asset_id']); // attach an asset to a loan
         
         return redirect()->route('loans.edit', $loan->id);

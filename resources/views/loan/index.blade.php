@@ -16,7 +16,12 @@
     </thead>
     <tbody>
 @foreach($loans as $loan)
-        <tr data-href="{{ route('loans.showoredit', $loan->id) }}">
+{{-- todo: this makes way too many requests to the policy. pull this code out of foreach --}}
+        @can('update', $loan) {{-- also checks for immutability --}}
+            <tr data-href="{{ route('loans.edit', $loan->id) }}">
+        @else
+            <tr data-href="{{ route('loans.show', $loan->id) }}">
+        @endcan
             <td>{{ config('app.conventions.loan_prefix') }}{{ $loan->id }}</td>
             <td>{{ $loan->borrower_name }}</td>
             <td>{{ $loan->borrower_room }}</td>

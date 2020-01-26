@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use App\Loan;
 use App\Asset;
 use App\Assetname;
+use App\Mail\LoanGiven;
+use App\Mail\LoanReturned;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class LoanController extends Controller
 {
     
-    public function __construct() {
-        $this->middleware('authenticate_as:werkzeugag');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -44,14 +44,18 @@ class LoanController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Loan::class);
+        
         $validatedData = $request->validate([
-            'name' => 'required|max:191',
-            'room' => 'required|max:4',
+            'borrower_name' => 'required|max:191',
+            'borrower_room' => 'integer|required|min:101|max:1113',
+            'borrower_email' => 'email|required|max:191',
         ]);
         
         $loan = new Loan();
-        $loan->borrower_name = $validatedData['name'];
-        $loan->borrower_room = $validatedData['room'];
+        $loan->borrower_name = $validatedData['borrower_name'];
+        $loan->borrower_room = $validatedData['borrower_room'];
+        $loan->borrower_email = $validatedData['borrower_email'];
         $loan->save();
         
         return redirect()->route('loans.edit', $loan->id);
@@ -75,16 +79,12 @@ class LoanController extends Controller
      * Show the form for editing the loan.
      * Associated assets are updated in AssetLoanController.
      *
-     * @param  int  $id
+     * @param  Loan  $loan automatic conversion from id in url to model
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, Loan $loan)
     {
-        $loan = Loan::find($id);
-        // for now, if the loan is immutable, just redirect to @show
-        if ($loan->isImmutable()) {
-            return redirect()->route('loans.show', $id);
-        }
+        $this->authorize('update', $loan);
         
         return view('loan.edit', [
             'loan' => $loan,
@@ -96,33 +96,33 @@ class LoanController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Loan  $loan automatic conversion from id in url to model
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Loan $loan)
     {
+        $this->authorize('update', $loan);
+        
         $validatedData = $request->validate([
             'borrower_name' => 'required|max:191',
-            'borrower_room' => 'required|max:4',
+            'borrower_room' => 'integer|required|min:101|max:1113',
+            'borrower_email' => 'email|required|max:191',
             'comment' => 'nullable',
             'statusupdate_hand_out' => 'nullable',
             'statusupdate_return' => 'nullable',
         ]);
         
-        $loan = Loan::find($id);
-        
-        if ($loan->isImmutable()) {
-            throw new \Exception('Cannot delete assets from this loan because it\'s immutable');
-        }
-        
         $loan->borrower_name = $validatedData['borrower_name'];
         $loan->borrower_room = $validatedData['borrower_room'];
+        $loan->borrower_email = $validatedData['borrower_email'];
         $loan->comment = $validatedData['comment'];
         if (isset($validatedData['statusupdate_hand_out'])) {
             $loan->setStatusHandedOut();
+            Mail::to($loan->borrower_email)->send(new LoanGiven($loan));
         }
         if (isset($validatedData['statusupdate_return'])) {
             $loan->setStatusReturned();
+            Mail::to($loan->borrower_email)->send(new LoanReturned($loan));
         }
         $loan->save();
         
