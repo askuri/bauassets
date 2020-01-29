@@ -1,7 +1,7 @@
 {
-    "name": "Bauassets",
+    "name": "laravel/laravel",
     "type": "project",
-    "description": "Manage assets.",
+    "description": "",
     "keywords": [
         "framework",
         "laravel"
