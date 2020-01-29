@@ -84,7 +84,7 @@ class LoanController extends Controller
      */
     public function edit(Request $request, Loan $loan)
     {
-        $this->authorize('update', $loan);
+        //$this->authorize('update', $loan);
         
         return view('loan.edit', [
             'loan' => $loan,
@@ -112,17 +112,22 @@ class LoanController extends Controller
             'statusupdate_return' => 'nullable',
         ]);
         
-        $loan->borrower_name = $validatedData['borrower_name'];
-        $loan->borrower_room = $validatedData['borrower_room'];
-        $loan->borrower_email = $validatedData['borrower_email'];
-        $loan->comment = $validatedData['comment'];
+        
         if (isset($validatedData['statusupdate_hand_out'])) {
             $loan->setStatusHandedOut();
             Mail::to($loan->borrower_email)->send(new LoanGiven($loan));
-        }
-        if (isset($validatedData['statusupdate_return'])) {
+        }else if (isset($validatedData['statusupdate_return'])) {
             $loan->setStatusReturned();
             Mail::to($loan->borrower_email)->send(new LoanReturned($loan));
+        } else {
+            // special: these info should only be updated if the loan is
+            // not marked as immutable
+            $this->authorize('updateImmutable', $loan);
+            
+            $loan->borrower_name = $validatedData['borrower_name'];
+            $loan->borrower_room = $validatedData['borrower_room'];
+            $loan->borrower_email = $validatedData['borrower_email'];
+            $loan->comment = $validatedData['comment'];
         }
         $loan->save();
         

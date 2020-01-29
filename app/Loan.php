@@ -49,7 +49,7 @@ class Loan extends Model
     public function getStatusText(): string {
         switch ($this->getStatus()) {
             case 0: return 'Created';
-            case 1: return 'Handed out';
+            case 1: return 'Awaiting return';
             case 2: return 'Returned';
         }
     }

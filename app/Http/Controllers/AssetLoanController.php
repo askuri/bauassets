@@ -51,8 +51,11 @@ class AssetLoanController extends Controller
         // find loan
         $loan = Loan::find($validatedData['loan_id']);
         
-        // restrict to authorized users, also checks if it's immutable
+        // restrict to authorized users
         $this->authorize('attachAsset', $loan);
+        
+        // only update if not immutable
+        $this->authorize('updateImmutable', $loan);
         
         // find asset
         try {
@@ -116,8 +119,11 @@ class AssetLoanController extends Controller
         
         $loan = Loan::find($validatedData['loan_id']);
         
-        // restrict to authorized users, also checks if it's immutable
+        // restrict to authorized users
         $this->authorize('detachAsset', $loan);
+        
+        // only update if not immutable
+        $this->authorize('updateImmutable', $loan);
         
         $loan->assets()->detach($validatedData['asset_id']); // attach an asset to a loan
         

@@ -5,7 +5,7 @@
 @section('content')
 <h3>Recent loans</h3>
 <h5>ordered by modification date</h5>
-<table class="table table-striped table-sm">
+<table class="table table-sm">
     <thead>
         <tr>
             <th scope="col">ID</th>
@@ -14,18 +14,18 @@
             <th scope="col">Status</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="table-hover">
 @foreach($loans as $loan)
 {{-- todo: this makes way too many requests to the policy. pull this code out of foreach --}}
-        @can('update', $loan) {{-- also checks for immutability --}}
-            <tr data-href="{{ route('loans.edit', $loan->id) }}">
+        @can('update', $loan)
+        <tr data-href="{{ route('loans.edit', $loan->id) }}" class="loan-status-color-{{ $loan->getStatus() }}">
         @else
             <tr data-href="{{ route('loans.show', $loan->id) }}">
         @endcan
             <td>{{ config('app.conventions.loan_prefix') }}{{ $loan->id }}</td>
             <td>{{ $loan->borrower_name }}</td>
             <td>{{ $loan->borrower_room }}</td>
-            <td>{{ $loan->getStatus() }}</td>
+            <td>{{ $loan->getStatusText() }}</td>
         </tr>
 @endforeach
     </tbody>

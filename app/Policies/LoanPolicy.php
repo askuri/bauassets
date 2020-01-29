@@ -11,8 +11,6 @@ class LoanPolicy
 {
     use HandlesAuthorization;
     
-    private $immutableLoanMessage = 'This loan is immutable and can\'t be edited. You can still view it.';
-
     /**
      * Determine whether the user can view any loans.
      *
@@ -49,7 +47,6 @@ class LoanPolicy
 
     /**
      * Determine whether the user can update the loan.
-     * Checks if it is immutable, too.
      *
      * @param  \App\User  $user
      * @param  \App\Loan  $loan
@@ -57,9 +54,6 @@ class LoanPolicy
      */
     public function update(User $user, Loan $loan)
     {
-        if ($loan->isImmutable()) {
-            return Response::deny($this->immutableLoanMessage);
-        }
         return $user->role == 'moderator';
     }
 
@@ -101,31 +95,40 @@ class LoanPolicy
     
     /**
      * Determine whether the user can attach more assets to the loan.
-     * Checks if it is immutable, too.
      *
      * @param  \App\User  $user
      * @param  \App\Loan  $loan
      * @return mixed
      */
     public function attachAsset(User $user, Loan $loan) {
-        if ($loan->isImmutable()) {
-            return Response::deny($this->immutableLoanMessage);
-        }
         return $user->role == 'moderator';
     }
     
     /**
      * Determine whether the user can detach more assets to the loan.
-     * Checks if it is immutable, too.
      *
      * @param  \App\User  $user
      * @param  \App\Loan  $loan
      * @return mixed
      */
     public function detachAsset(User $user, Loan $loan) {
-        if ($loan->isImmutable()) {
-            return Response::deny($this->immutableLoanMessage);
-        }
         return $user->role == 'moderator';
+    }
+    
+    /**
+     * Determine whether the asset is immutable
+     *  false: allow for sure
+     *  true: check whether the user might still be able to alter it
+     *      (not implemented yet)
+     *
+     * @param  \App\User  $user
+     * @param  \App\Loan  $loan
+     * @return mixed
+     */
+    public function updateImmutable(User $user, Loan $loan) {
+        if ($loan->isImmutable()) {
+            return Response::deny('This loan is immutable and can\'t be edited. You can still view it. This might be because the loan is already handed out and changes should\'t be made');
+        }
+        return Response::allow();
     }
 }
