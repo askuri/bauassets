@@ -35,7 +35,7 @@ class LoanGiven extends Mailable
      */
     public function build()
     {
-        return $this->subject('Leihgabe erhalten / Loan given')
+        return $this->subject('Leihgabe erhalten / Loan obtained')
                 ->markdown('emails.LoanGiven');
     }
 }
