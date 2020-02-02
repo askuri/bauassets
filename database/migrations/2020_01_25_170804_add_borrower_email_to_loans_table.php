@@ -14,7 +14,7 @@ class AddBorrowerEmailToLoansTable extends Migration
     public function up()
     {
         Schema::table('loans', function (Blueprint $table) {
-            $table->string('borrower_email');
+            $table->string('borrower_email')->nullable();
         });
     }
 
