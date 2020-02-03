@@ -28,8 +28,20 @@
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
         <server name="CACHE_DRIVER" value="array"/>
+        
+        <!-- do not use sqlite as it is not compatible with the db migrations.
+        And fixing db migrations to test in a different environment than
+        production is far from ideal anyway ...
         <server name="DB_CONNECTION" value="sqlite"/>
         <server name="DB_DATABASE" value=":memory:"/>
+        -->
+        <server name="DB_CONNECTION" value="mysql"/>
+        <server name="DB_HOST" value="127.0.0.1"/>
+        <server name="DB_PORT" value="3306"/>
+        <server name="DB_DATABASE" value="bauassets_test"/>
+        <server name="DB_USERNAME" value="bauassets_test"/>
+        <server name="DB_PASSWORD" value=""/>
+        
         <server name="MAIL_DRIVER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>
         <server name="SESSION_DRIVER" value="array"/>
