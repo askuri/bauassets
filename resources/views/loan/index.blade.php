@@ -17,11 +17,11 @@
     <tbody class="table-hover">
 @foreach($loans as $loan)
 {{-- todo: this makes way too many requests to the policy. pull this code out of foreach --}}
-        @can('update', $loan)
+    @can('update', $loan)
         <tr data-href="{{ route('loans.edit', $loan->id) }}" class="loan-status-color-{{ $loan->getStatus() }}">
-        @else
-            <tr data-href="{{ route('loans.show', $loan->id) }}">
-        @endcan
+    @else
+        <tr data-href="{{ route('loans.show', $loan->id) }}" class="loan-status-color-{{ $loan->getStatus() }}">
+    @endcan
             <td>{{ config('app.conventions.loan_prefix') }}{{ $loan->id }}</td>
             <td>{{ $loan->borrower_name }}</td>
             <td>{{ $loan->borrower_room }}</td>
