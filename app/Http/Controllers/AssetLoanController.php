@@ -45,7 +45,7 @@ class AssetLoanController extends Controller
         
         $validatedData = $request->validate([
             'loan_id' => 'required|integer',
-            'asset_search' => 'nullable',
+            'asset_search' => 'nullable', // why is this nullable?!
         ]);
         
         // find loan
@@ -62,7 +62,8 @@ class AssetLoanController extends Controller
             $assetname = Assetname::where('name', '=', $validatedData['asset_search'])
                     ->firstOrFail();
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return back()->with('no_asset_found', 'message is written in view');
+            return back()->withErrors(['asset_search' => 'Could not find asset called '.old('asset_search').'. Please make sure
+        you pick one of the names from the suggestions. If you do not see suggestions, try using another (up to date) browser.']);
         }
         
         // we got all information, now attach the asset to the loan

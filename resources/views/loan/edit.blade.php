@@ -86,13 +86,6 @@
 <br>
 
 <h5>Add asset</h5>
-@if (session('no_asset_found'))
-<div class="alert alert-warning">
-    <p>Could not find asset called {{ old('asset_search') }}. Please make sure
-        you pick one of the names from the suggestions.</p>
-    <p>If you do not see suggestions, try using another (up to date) browser.</p>
-</div>
-@endif
 <form method="post" action="{{ route('assetsloans.store') }}" class="form-inline">
     @csrf
     <input type="hidden" name="loan_id" value="{{ $loan->id }}">
