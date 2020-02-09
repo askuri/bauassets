@@ -172,19 +172,15 @@ class LoansTest extends TestCase
     
     /**
      * Tests if unauthorized users can view the edit form
-     * @todo unauthorized users can currently see this page
      */
     public function testEditLoanUnauthorized() {
-        $this->markTestSkipped('This is not yet implemented.');
-        
         $response = $this->get(route('loans.edit', $this->loan_withassets));
         
-        // @todo
-        $response->assertRedirect();
+        $response->assertForbidden();
     }
     
     /**
-     * Tests if unauthorized users can view the edit form
+     * Tests if authorized users can view the edit form
      * @todo status dates not tested
      */
     public function testEditLoanAuthorized() {

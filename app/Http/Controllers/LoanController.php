@@ -84,7 +84,7 @@ class LoanController extends Controller
      */
     public function edit(Request $request, Loan $loan)
     {
-        //$this->authorize('update', $loan);
+        $this->authorize('update', $loan);
         
         return view('loan.edit', [
             'loan' => $loan,
