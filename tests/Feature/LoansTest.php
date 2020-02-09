@@ -211,6 +211,8 @@ class LoansTest extends TestCase
     /**
      * Test if an authorized user can update a loan with
      * correct input and if the changes are correctly persisted.
+     * 
+     * @todo use $this->followingRedirects() instead of making to requests
      */
     public function testUpdateLoanAuthorizedWithInput() {
         $response = $this->actingAs($this->user_moderator)
@@ -245,6 +247,6 @@ class LoansTest extends TestCase
                     'borrower_email' => 'dummy_data@here_because.of',
                     'comment' => 'validation in controller',
                 ]);
-        $response->assertForbidden();
+        $response->assertForbidden(); // forbidden means we can't update an immutable loan
     }
 }
