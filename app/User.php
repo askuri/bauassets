@@ -36,4 +36,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    /**
+     * Loans created by this user
+     * @return type
+     */
+    public function created_loans() {
+        return $this->hasMany(\App\Loan::class, 'issuer_user_id', 'id');
+    }
 }

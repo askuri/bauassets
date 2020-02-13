@@ -9,6 +9,7 @@ use App\Mail\LoanGiven;
 use App\Mail\LoanReturned;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 class LoanController extends Controller
 {
@@ -56,6 +57,7 @@ class LoanController extends Controller
         $loan->borrower_name = $validatedData['borrower_name'];
         $loan->borrower_room = $validatedData['borrower_room'];
         $loan->borrower_email = $validatedData['borrower_email'];
+        $loan->issuer()->associate(Auth::user());
         $loan->save();
         
         return redirect()->route('loans.edit', $loan->id);

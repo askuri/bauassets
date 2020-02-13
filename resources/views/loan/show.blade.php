@@ -4,9 +4,11 @@
 
 @section('content')
 <h3>Showing loan (ID <i>{{ config('app.conventions.loan_prefix') }}{{ $loan->id }}</i>)</h3>
+<p><i>Issued by {{ $loan->issuer->name }}</i></p>
 
 <p>Borrower name: {{ $loan->borrower_name }}</p>
-<p>Borrower Room: {{ $loan->borrower_room }}</p>
+<p>Borrower room: {{ $loan->borrower_room }}</p>
+<p>Issuer name: {{ $loan->issuer->name }}</p>
 <p>Comment: {{ $loan->comment }}</p>
 <p>Status: {{ $loan->getStatusText() }}</p>
    

@@ -83,8 +83,22 @@ class Loan extends Model
         return $this->getStatus() >= self::STATUS_HANDED_OUT;
     }
     
+    /**
+     * Belongs to Many relation to App\Assets
+     * @return type
+     */
     public function assets()
     {
         return $this->belongsToMany('App\Asset');
+    }
+    
+    /** 
+     * Belongs to relation to Users.
+     * One loan always has one issuer.
+     * 
+     * @return type
+     */
+    public function issuer() {
+        return $this->belongsTo(\App\User::class, 'issuer_user_id', 'id');
     }
 }

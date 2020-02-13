@@ -16,6 +16,11 @@ $factory->define(Loan::class, function (Faker $faker) {
     ];
 });
 
+// add the user to the loan
+$factory->afterMaking(Loan::class, function($loan, $faker) {
+   $loan->issuer()->associate(factory(App\User::class)->state('role_moderator')->create());
+});
+
 // a loan is considered immutable if it has been handed out
 $factory->state(Loan::class, 'not_immutable', [
     'date_given' => null,

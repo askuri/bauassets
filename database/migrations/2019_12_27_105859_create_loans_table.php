@@ -19,8 +19,11 @@ class CreateLoansTable extends Migration
             $table->timestamp('date_returned')->nullable();
             $table->string('borrower_name');
             $table->integer('borrower_room');
+            $table->unsignedBigInteger('issuer_user_id');
             $table->string('comment')->nullable();
             $table->timestamps();
+            
+            $table->foreign('issuer_user_id')->references('id')->on('users');
         });
     }
 

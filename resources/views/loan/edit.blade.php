@@ -4,6 +4,7 @@
 
 @section('content')
 <h3>Edit loan (ID <i>{{ config('app.conventions.loan_prefix') }}{{ $loan->id }}</i>)</h3>
+<p><i>Issued by {{ $loan->issuer->name }}</i></p>
 <form method="post" action="{{ route('loans.update', $loan->id) }}">
     @csrf
     @method('PUT')

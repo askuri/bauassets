@@ -102,6 +102,7 @@ class LoansTest extends TestCase
 
         $response->assertSuccessful();
         
+        $response->assertSee($this->loan_noasset->issuer->name);
         $response->assertSee($this->loan_noasset->borrower_name);
         $response->assertSee($this->loan_noasset->borrower_room);
         $response->assertSee($this->loan_noasset->comment);
@@ -189,6 +190,7 @@ class LoansTest extends TestCase
         
         $response->assertOk();
         
+        $response->assertSee($this->loan_noasset->issuer->name);
         $response->assertSee($this->loan_noasset->borrower_name);
         $response->assertSee($this->loan_noasset->borrower_room);
         $response->assertSee($this->loan_noasset->borrower_email);
