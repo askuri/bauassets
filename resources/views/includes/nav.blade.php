@@ -55,7 +55,7 @@
             </li>
             
             <li class="nav-item">
-                <a class="nav-link" href="">Asset Catalog</a>
+                <a class="nav-link" href="{{ route('assets.index') }}">Asset Catalog</a>
             </li>
             
         </ul>

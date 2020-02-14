@@ -16,6 +16,9 @@ Auth::routes();
 Route::get('/', 'HomeController@index')
         ->name('home');
 
+Route::get('assets/show_by_search', 'AssetController@showBySearch')->name('assets.show_by_search');
+Route::resource('assets', 'AssetController');
+
 Route::resource('loans', 'LoanController');
 
 Route::resource('assetsloans', 'AssetLoanController');
