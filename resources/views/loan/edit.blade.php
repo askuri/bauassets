@@ -91,17 +91,8 @@
     @csrf
     <input type="hidden" name="loan_id" value="{{ $loan->id }}">
     
-    <div class="form-group mb-2">
-        <datalist id="list_asset_names">
-            @foreach($allAssetnames as $name)
-                <option label="{{ $name->name }}" value="{{ $name->name }}">
-            @endforeach
-        </datalist>
-        <input type="search" class="form-control" id="asset_search"
-               list="list_asset_names" name="asset_search"
-               placeholder="Asset name ..."
-               value="{{ session('no_asset_found') ? old('asset_search') : '' }}">
-    </div>
+    @include('includes.asset_search_field')
+    
     <button type="submit" class="btn btn-primary mb-2">Add</button>
 </form>
 

@@ -90,7 +90,6 @@ class LoanController extends Controller
         
         return view('loan.edit', [
             'loan' => $loan,
-            'allAssetnames' => Assetname::all(),
         ]);
     }
 
