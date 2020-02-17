@@ -34,7 +34,7 @@ class LoanController extends Controller
      */
     public function create()
     {
-        return view('loan.new');
+        return view('loan.create');
     }
 
     /**
