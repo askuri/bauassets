@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Asset;
 use App\Assetname;
+use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AssetController extends Controller
 {
@@ -37,7 +39,7 @@ class AssetController extends Controller
     public function index()
     {
         return view('asset.index', [
-            //'assets' => Asset::all(),
+            'assets' => Asset::with(['category', 'assetnames'])->get(),
         ]);
     }
 
@@ -48,7 +50,8 @@ class AssetController extends Controller
      */
     public function create()
     {
-        //
+        $this->authorize('create', Asset::class);
+        return view('asset.create');
     }
 
     /**
@@ -59,7 +62,38 @@ class AssetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->authorize('create', Asset::class);
+        $validatedData = $request->validate([
+            'location' => 'required',
+            'category' => 'required|integer|min:1',
+            'stock' => 'nullable|integer|min:1',
+            'assetnames_lang' => 'required|array',
+            'assetnames_name' => 'required|array',
+        ]);
+        
+        $asset = DB::transaction(function () use ($validatedData) {
+            //create asset
+            $asset = new Asset();
+            $asset->location = $validatedData['location'];
+            $asset->stock = $validatedData['stock'];
+            
+            // add the category as given by the user
+            $asset->category()->associate(Category::find($validatedData['category']));
+            
+            // save asset so we know the id
+            $asset->save();
+            
+            // add names
+            for ($i = 0; $i < count($validatedData['assetnames_lang']); $i++) {
+                $assetname = new Assetname();
+                $assetname->language = $validatedData['assetnames_lang'][$i];
+                $assetname->name = $validatedData['assetnames_name'][$i];
+                $asset->assetnames()->save($assetname);
+            }
+            return $asset;
+        });
+
+        return redirect()->route('assets.show', $asset->id);
     }
 
     /**

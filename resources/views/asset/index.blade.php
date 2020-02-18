@@ -11,7 +11,31 @@
     <button type="submit" class="btn btn-primary mb-2">Search</button>
 </form>
 
-<h5>Catalog (work in progress)</h5>
-
+<h5>Catalog</h5>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">Names</th>
+            <th scope="col">Category</th>
+            <th scope="col">Location</th>
+            <th scope="col">Stock (total)</th>
+        </tr>
+    </thead>
+    <tbody class="table-hover">
+@foreach($assets as $asset)
+{{-- todo: this makes way too many requests to the policy. pull this code out of foreach --}}
+    @can('update', $asset)
+        <tr data-href="{{ route('assets.edit', $asset->id) }}">
+    @else
+        <tr data-href="{{ route('assets.show', $asset->id) }}">
+    @endcan
+            <td>{{ $asset->getNamesString() }}</td>
+            <td>{{ $asset->category->name }}</td>
+            <td>{{ $asset->location }}</td>
+            <td>{{ $asset->stock }}</td>
+        </tr>
+@endforeach
+    </tbody>
+</table>
 
 @endsection

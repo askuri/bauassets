@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Loan;
 use App\User;
+use App\Category;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -18,6 +19,8 @@ class AssetTest extends TestCase
     private $loan_withassets;
     private $loan_withassets_notimmutable;
     
+    private $category;
+    
     private $user;
     private $user_moderator;
     
@@ -28,8 +31,79 @@ class AssetTest extends TestCase
         $this->loan_withassets = factory(Loan::class)->state("with_assets")->create();
         $this->loan_withassets_notimmutable = factory(Loan::class)->states("with_assets", "not_immutable")->create();
         
+        $this->category = factory(Category::class)->create();
+        
         $this->user = factory(User::class)->create();
         $this->user_moderator = factory(User::class)->state('role_moderator')->create();
+    }
+    
+    /**
+     * Test if assets are listed in index.
+     * Not testing for all assets.
+     */
+    public function testIndex() {
+        $response = $this->get(route('assets.index'));
+        foreach ($this->loan_withassets->assets as $asset) {
+            $response->assertSeeText($asset->getNamesString());
+            $response->assertSeeText($asset->category->name);
+            $response->assertSeeText($asset->stock);
+            $response->assertSeeText($asset->location);
+        }
+    }
+    
+    /**
+     * Test if an unauthorized user can see the create asset form
+     */
+    public function testCreateAssetUnauthorized() {
+        $response = $this->get(route('assets.create'));
+        $response->assertForbidden();
+    }
+    
+    /**
+     * Test if an authorized user can see the create asset form
+     */
+    public function testCreateAssetAuthorized() {
+        $response = $this->actingAs($this->user_moderator)
+                ->get(route('assets.create'));
+        $response->assertOk();
+    }
+    
+    /**
+     * Test if an unauthorized user can store an asset
+     */
+    public function testStoreAssetUnauthorized() {
+        $response = $this->post(route('assets.store'), [
+            'location' => 'somewhere',
+            'category' => 1,
+            'stock' => 1,
+            'assetnames_lang' => ['en'],
+            'assetnames_name' => ['adsf'],
+        ]);
+        $response->assertForbidden();
+    }
+    
+    /**
+     * Test if an authorized user can store an asset
+     * and if it is saved correctly.
+     */
+    public function testStoreAssetAuthorized() {
+        $this->followingRedirects();
+        // store
+        $response = $this->actingAs($this->user_moderator)
+                ->post(route('assets.store'), [
+            'location' => 'location somewhere',
+            'category' => $this->category->id,
+            'stock' => 3,
+            'assetnames_lang' => ['en'],
+            'assetnames_name' => ['some long name'],
+        ]);
+        $response->assertOk();
+        
+        // check if stored correctly
+        $response->assertSeeText('location somewhere');
+        $response->assertSeeText($this->category->name);
+        $response->assertSeeText(3);
+        $response->assertSeeText('some long name');
     }
     
     /**
