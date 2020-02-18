@@ -126,7 +126,7 @@ class LoansTest extends TestCase
     /**
      * Tests if creating a loan as an unauthorized user is possible
      */
-    public function testCreateLoanUnauthorized() {
+    public function testStoreLoanUnauthorized() {
         $response = $this->actingAs($this->user)
                 ->post(route('loans.store'));
         
@@ -137,7 +137,7 @@ class LoansTest extends TestCase
      * Tests if creating a loan as an authorized user
      * without any input is possible
      */
-    public function testCreateLoanAuthorizedNoInput() {
+    public function testStoreLoanAuthorizedNoInput() {
         $response = $this->actingAs($this->user_moderator)
                 ->post(route('loans.store'));
         
@@ -154,7 +154,7 @@ class LoansTest extends TestCase
      * Tests if creating a loan as an authorized user
      * with input is possible
      */
-    public function testCreateLoanAuthorizedWithInput() {
+    public function testStoreLoanAuthorizedWithInput() {
         $response = $this->actingAs($this->user_moderator)
                 ->post(route('loans.store'), [
                     'borrower_name' => 'Testname',
