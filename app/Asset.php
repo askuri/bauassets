@@ -38,12 +38,30 @@ class Asset extends Model
         return trim($out, ' / ');
     }
 
+    /**
+     * Names of the asset are not directly stored. There's a table
+     * just for asset names and this is the relation for it.
+     * @return type
+     */
     public function assetnames() {
         return $this->hasMany('App\Assetname');
     }
     
+    /**
+     * Many Assets can belong to many loans (N:M)
+     * @return type
+     */
     public function loans()
     {
         return $this->belongsToMany('App\Loan');
+    }
+    
+    /**
+     * One asset is part of one category. Categories can have many
+     * categories.
+     * @return type
+     */
+    public function category() {
+        return $this->belongsTo('App\Category');
     }
 }

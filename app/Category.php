@@ -19,4 +19,13 @@ class Category extends Model
      * @var array
      */
     protected $fillable = ['name'];
+    
+    /**
+     * One asset is part of one category. Categories can have many
+     * categories.
+     * @return type
+     */
+    public function assets() {
+        return $this->hasMany('App\Asset');
+    }
 }
