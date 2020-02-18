@@ -14,7 +14,7 @@
     <div class="form-group">
         <label for="category">Category</label>
         <select class="form-control" id="category" name="category" required>
-            <option value="1">Testname</option>
+            @include('includes.category_select_options')
         </select>
     </div>
     <div class="form-group">
@@ -30,14 +30,14 @@
             Name
         </div>
     </div>
-    <div class="form-row">
-        <div class="col">
+        <div class="form-row">
+            <div class="col">
             <input type="text" class="form-control" name="assetnames_lang[]">
-        </div>
-        <div class="col">
+            </div>
+            <div class="col">
             <input type="text" class="form-control" name="assetnames_name[]">
+            </div>
         </div>
-    </div>
     <div class="form-row">
         <div class="col">
             <input type="text" class="form-control" name="assetnames_lang[]">

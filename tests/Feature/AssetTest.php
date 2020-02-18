@@ -66,6 +66,8 @@ class AssetTest extends TestCase
         $response = $this->actingAs($this->user_moderator)
                 ->get(route('assets.create'));
         $response->assertOk();
+        $response->assertSeeText($this->category->language);
+        $response->assertSeeText($this->category->name);
     }
     
     /**
