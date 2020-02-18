@@ -4,6 +4,9 @@
 
 @section('content')
 <h3>Asset Details</h3>
+<p>Category: {{ $asset->category->name }}</p>
+<p>Stock (total): {{ $asset->stock }}</p>
+<p>Location: {{ $asset->location }}</p>
 
 <h5>Names</h5>
 <ul>
