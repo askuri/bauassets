@@ -44,6 +44,10 @@
                 </li>
             @endguest
             
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('loans.index') }}">Show Loans</a>
+            </li>
+            
             @can('create', App\Loan::class)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('loans.create') }}">New Loan</a>
@@ -51,12 +55,14 @@
             @endcan
             
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('loans.index') }}">Show Loans</a>
-            </li>
-            
-            <li class="nav-item">
                 <a class="nav-link" href="{{ route('assets.index') }}">Asset Catalog</a>
             </li>
+            
+            @can('create', App\Asset::class)
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('assets.create') }}">Add Assets</a>
+            </li>
+            @endcan
             
         </ul>
     </div>
