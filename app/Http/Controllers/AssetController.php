@@ -67,8 +67,10 @@ class AssetController extends Controller
             'location' => 'required',
             'category' => 'required|integer|min:1',
             'stock' => 'nullable|integer|min:1',
-            'assetnames_lang' => 'required|array',
-            'assetnames_name' => 'required|array',
+            'assetnames_language' => 'array',
+            //'assetnames_language.*' => //must be 2 char lang code
+            'assetnames_name' => 'array',
+            'assetnames_name.*' => 'nullable|distinct|unique:App\Assetname,name',
         ]);
         
         $asset = DB::transaction(function () use ($validatedData) {
@@ -84,15 +86,20 @@ class AssetController extends Controller
             $asset->save();
             
             // add names
-            for ($i = 0; $i < count($validatedData['assetnames_lang']); $i++) {
-                $assetname = new Assetname();
-                $assetname->language = $validatedData['assetnames_lang'][$i];
-                $assetname->name = $validatedData['assetnames_name'][$i];
-                $asset->assetnames()->save($assetname);
+            for ($i = 0; $i < count($validatedData['assetnames_language']); $i++) {
+                $language = $validatedData['assetnames_language'][$i];
+                $name = $validatedData['assetnames_name'][$i];
+                
+                if (!empty($language) && !empty($name)) { // language and name are required
+                    $assetname = new Assetname();
+                    $assetname->language = $language;
+                    $assetname->name = $name;
+                    $asset->assetnames()->save($assetname);
+                }
             }
             return $asset;
         });
-
+        
         return redirect()->route('assets.show', $asset->id);
     }
 

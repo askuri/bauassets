@@ -78,7 +78,7 @@ class AssetTest extends TestCase
             'location' => 'somewhere',
             'category' => 1,
             'stock' => 1,
-            'assetnames_lang' => ['en'],
+            'assetnames_language' => ['en'],
             'assetnames_name' => ['adsf'],
         ]);
         $response->assertForbidden();
@@ -96,8 +96,8 @@ class AssetTest extends TestCase
             'location' => 'location somewhere',
             'category' => $this->category->id,
             'stock' => 3,
-            'assetnames_lang' => ['en'],
-            'assetnames_name' => ['some long name'],
+            'assetnames_language' => ['', 'de', 'en', 'rw'],
+            'assetnames_name' => ['', 'en langer name', 'some long name', '', 'nini'],
         ]);
         $response->assertOk();
         
@@ -105,7 +105,9 @@ class AssetTest extends TestCase
         $response->assertSeeText('location somewhere');
         $response->assertSeeText($this->category->name);
         $response->assertSeeText(3);
+        $response->assertSeeText('en langer name');
         $response->assertSeeText('some long name');
+        $response->assertDontSeeText('nini'); // no corresponding language, so not added
     }
     
     /**
