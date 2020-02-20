@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'New loan')
+@section('title', 'Edit loan')
 
 @section('content')
 <h3>Edit loan (ID <i>{{ config('app.conventions.loan_prefix') }}{{ $loan->id }}</i>)</h3>
