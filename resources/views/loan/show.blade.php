@@ -8,7 +8,6 @@
 
 <p>Borrower name: {{ $loan->borrower_name }}</p>
 <p>Borrower room: {{ $loan->borrower_room }}</p>
-<p>Issuer name: {{ $loan->issuer->name }}</p>
 <p>Comment: {{ $loan->comment }}</p>
 <p>Status: {{ $loan->getStatusText() }}</p>
    
