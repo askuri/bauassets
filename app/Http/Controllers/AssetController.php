@@ -68,7 +68,7 @@ class AssetController extends Controller
             'category' => 'required|integer|min:1',
             'stock' => 'nullable|integer|min:1',
             'assetnames_language' => 'array',
-            //'assetnames_language.*' => //must be 2 char lang code
+            'assetnames_language.*' => 'nullable|min:2|max:2',
             'assetnames_name' => 'array',
             'assetnames_name.*' => 'nullable|distinct|unique:App\Assetname,name',
         ]);
