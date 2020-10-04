@@ -42,10 +42,10 @@ class LoansTest extends TestCase
      * Check if the response shows the names of the assets contained in
      * the collection.
      * 
-     * @param \Illuminate\Foundation\Testing\TestResponse $response
+     * @param \Illuminate\Testing\TestResponse $response
      * @param \Illuminate\Database\Eloquent\Collection $assets Collection of App\Asset
      */
-    public function helperTestAssetNamesShown(\Illuminate\Foundation\Testing\TestResponse $response, \Illuminate\Database\Eloquent\Collection $assets) {
+    public function helperTestAssetNamesShown(\Illuminate\Testing\TestResponse $response, \Illuminate\Database\Eloquent\Collection $assets) {
         foreach ($assets as $asset) {
             foreach ($asset->assetnames as $assetname) {
                 $response->assertSee($assetname->name);

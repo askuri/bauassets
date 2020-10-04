@@ -71,5 +71,8 @@ class ImportAssetsCSV extends Command
                 if (!empty($en2)) (new Assetname(['language' => 'en', 'name' => $en2, 'asset_id' => $asset->id]))->save();
             });
         }
+        
+        // probably need to return an integer here since a change
+        // in symfony. see https://laravel.com/docs/7.x/upgrade
     }
 }
