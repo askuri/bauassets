@@ -22,7 +22,7 @@ be fairly easy to see, who has the asset: The asset is always with the person
 that has the loan with the status *Awaiting return*.
 
 ## Requirements
-- PHP >= 7.2
+- PHP >= 7.3
 - MariaDB server >= 10.1 (or MySQL equivalent)
 - composer
 
@@ -34,6 +34,9 @@ that has the loan with the status *Awaiting return*.
 - `php artisan key:generate`
 - Setup .env file according to your needs
 - `php artisan serve` to start the webserver
+
+## Testing
+- run from the project's root: `./vendor/bin/phpunit`
 
 ## Contributing
 The software is built using the Laravel Framework (Version 6) and we try to
