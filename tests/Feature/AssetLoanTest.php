@@ -24,12 +24,15 @@ class AssetLoanTest extends TestCase
     public function setUp(): void {
         parent::setUp();
         
-        $this->loan_noasset = factory(Loan::class)->create();
-        $this->loan_withassets = factory(Loan::class)->state("with_assets")->create();
-        $this->loan_withassets_notimmutable = factory(Loan::class)->states("with_assets", "not_immutable")->create();
+        $this->loan_noasset = Loan::factory()->create();
+        $this->loan_withassets = Loan::factory()->with_assets()->create();
+        $this->loan_withassets_notimmutable = Loan::factory()
+                ->with_assets()
+                ->not_immutable()
+                ->create();
         
-        $this->user = factory(User::class)->create();
-        $this->user_moderator = factory(User::class)->state('role_moderator')->create();
+        $this->user = User::factory()->create();
+        $this->user_moderator = User::factory()->role_moderator()->create();
     }
     
     /**

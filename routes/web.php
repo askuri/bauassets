@@ -13,14 +13,19 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])
         ->name('home');
 
-Route::get('assets/show_by_search', 'AssetController@showBySearch')->name('assets.show_by_search');
-Route::resource('assets', 'AssetController');
+// assets
+Route::get('assets/show_by_search', [\App\Http\Controllers\AssetController::class, 'showBySearch'])
+        ->name('assets.show_by_search');
+Route::resource('assets', \App\Http\Controllers\AssetController::class);
 
-Route::resource('loans', 'LoanController');
+// loans
+Route::resource('loans', \App\Http\Controllers\LoanController::class);
 
-Route::resource('assetsloans', 'AssetLoanController');
+// assetsloans
+Route::resource('assetsloans', \App\Http\Controllers\AssetLoanController::class);
 // AssetLoan relation should not be destroyed by asset_loan_id but by each asset and loan id
-Route::delete('assetsloans', 'AssetLoanController@destroy')->name('assetsloans.destroy');
+Route::delete('assetsloans', [\App\Http\Controllers\AssetLoanController::class, 'destroy'])
+        ->name('assetsloans.destroy');

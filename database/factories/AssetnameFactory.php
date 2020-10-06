@@ -1,14 +1,29 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Assetname;
-use Faker\Generator as Faker;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-// create an assetname
-$factory->define(Assetname::class, function (Faker $faker) {
-    return [
-        'language' => $faker->languageCode,
-        'name' => $faker->text(30),
-    ];
-});
+class AssetnameFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = Assetname::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'language' => $this->faker->languageCode,
+            'name' => $this->faker->text(30),
+        ];
+    }
+}
