@@ -44,9 +44,11 @@
                 </li>
             @endguest
             
+            @can('viewAny', App\Loan::class)
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('loans.index') }}">Show Loans</a>
             </li>
+            @endcan
             
             @can('create', App\Loan::class)
             <li class="nav-item">

@@ -21,6 +21,8 @@ class LoanController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Loan::class);
+        
         $loans = Loan::orderBy('updated_at', 'desc')->get();
         return view('loan.index', [
             'loans' => $loans,
