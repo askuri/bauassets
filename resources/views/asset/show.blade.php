@@ -3,7 +3,12 @@
 @section('title', 'Asset Details')
 
 @section('content')
-<h3>Asset Details</h3>
+<h3>Asset Details
+@can('update', $asset)
+    <a href="{{ route('assets.edit', $asset->id) }}" class="btn btn-secondary btn-sm"><i class="fa fa-pencil"></i></a>
+@endcan
+</h3>
+
 <p>Category: {{ $asset->category->name }}</p>
 <p>Stock (total): {{ $asset->stock }}</p>
 <p>Location: {{ $asset->location }}</p>
@@ -27,19 +32,14 @@
         </tr>
     </thead>
     <tbody class="table-hover">
-@foreach($asset->loans as $loan)
-{{-- todo: this makes way too many requests to the policy. pull this code out of foreach --}}
-    @can('update', $loan)
-        <tr data-href="{{ route('loans.edit', $loan->id) }}" class="loan-status-color-{{ $loan->getStatus() }}">
-    @else
-        <tr data-href="{{ route('loans.edit', $loan->id) }}" class="loan-status-color-{{ $loan->getStatus() }}">
-    @endcan
+    @foreach($asset->loans as $loan)
+        <tr data-href="{{ route('loans.show', $loan->id) }}" class="loan-status-color-{{ $loan->getStatus() }}">
             <td>{{ $loan->borrower_name }}</td>
             <td>{{ $loan->borrower_room }}</td>
             <td>{{ $loan->issuer->name }}</td>
             <td>{{ $loan->getStatusText() }}</td>
         </tr>
-@endforeach
+    @endforeach
     </tbody>
 </table>
 

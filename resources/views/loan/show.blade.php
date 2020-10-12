@@ -3,7 +3,12 @@
 @section('title', 'Show loan')
 
 @section('content')
-<h3>Showing loan (ID <i>{{ config('app.conventions.loan_prefix') }}{{ $loan->id }}</i>)</h3>
+<h3>Showing loan (ID <i>{{ config('app.conventions.loan_prefix') }}{{ $loan->id }}</i>)
+@can('update', $loan)
+    <a href="{{ route('loans.edit', $loan->id) }}" class="btn btn-secondary btn-sm"><i class="fa fa-pencil"></i></a>
+@endcan
+</h3>
+
 <p><i>Issued by {{ $loan->issuer->name }}</i></p>
 
 <p>Borrower name: {{ $loan->borrower_name }}</p>

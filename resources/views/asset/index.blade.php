@@ -22,19 +22,14 @@
         </tr>
     </thead>
     <tbody class="table-hover">
-@foreach($assets as $asset)
-{{-- todo: this makes way too many requests to the policy. pull this code out of foreach --}}
-    @can('update', $asset)
-        <tr data-href="{{ route('assets.edit', $asset->id) }}">
-    @else
+    @foreach($assets as $asset)
         <tr data-href="{{ route('assets.show', $asset->id) }}">
-    @endcan
             <td>{{ $asset->getNamesString() }}</td>
             <td>{{ $asset->category->name }}</td>
             <td>{{ $asset->location }}</td>
             <td>{{ $asset->stock }}</td>
         </tr>
-@endforeach
+    @endforeach
     </tbody>
 </table>
 
