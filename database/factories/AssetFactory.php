@@ -41,7 +41,7 @@ class AssetFactory extends Factory
                 // add some names to the asset. That is always done as an asset
                 // without any names is not allowed.
                 ->saveMany(
-                    Assetname::factory()->count(4)->create(['asset_id' => $asset->id])
+                    Assetname::factory()->count(4)->create(['asset_id' => $asset->id]) // do not change count! tests depend on exactly that number
                 );
         });
     }

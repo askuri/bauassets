@@ -67,11 +67,7 @@ class LoansTest extends TestCase
         //$this->withoutExceptionHandling();
         $response = $this->get(route('loans.index'));
 
-        $response->assertSuccessful();
-        
-        $response->assertSee($this->loan_noasset->borrower_name);
-        $response->assertSee($this->loan_noasset->borrower_room);
-        $response->assertSee(route('loans.show', $this->loan_noasset->id));
+        $response->assertForbidden();
     }
     
     /**
@@ -90,7 +86,7 @@ class LoansTest extends TestCase
         
         $response->assertSee($this->loan_noasset->borrower_name);
         $response->assertSee($this->loan_noasset->borrower_room);
-        $response->assertSee(route('loans.edit', $this->loan_noasset->id));
+        $response->assertSee(route('loans.show', $this->loan_noasset->id));
     }
     
     /**

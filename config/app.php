@@ -4,6 +4,7 @@ return [
     // user defined
     'conventions' => [
         'loan_prefix' => 'L', // warning: this does not affect data in DB, just changes how it looks
+        'asset_prefix' => 'A', // warning: this does not affect data in DB, just changes how it looks
     ],
     
 

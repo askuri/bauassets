@@ -3,7 +3,7 @@
 @section('title', 'Asset Details')
 
 @section('content')
-<h3>Asset Details
+<h3>Asset Details (ID <i>{{ config('app.conventions.asset_prefix') }}{{ $asset->id }}</i>)
 @can('update', $asset)
     <a href="{{ route('assets.edit', $asset->id) }}" class="btn btn-secondary btn-sm"><i class="fa fa-pencil"></i></a>
 @endcan

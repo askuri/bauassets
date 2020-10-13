@@ -121,21 +121,74 @@ class AssetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Asset $asset)
     {
-        //
+        $this->authorize('update', $asset);
+        return view('asset.edit', [
+            'asset' => $asset,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  App\Asset $asset instance of the asset model we are updating
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Asset $asset)
     {
-        //
+        $this->authorize('update', $asset);
+        $validatedData = $request->validate([
+            'location' => 'required',
+            'category' => 'required|integer|min:1',
+            'stock' => 'nullable|integer|min:1',
+            'assetnames_id' => 'array',
+            'assetnames_id.*' => 'nullable|numeric|min:0',
+            'assetnames_language' => 'array',
+            'assetnames_language.*' => 'nullable|min:2|max:2',
+            'assetnames_name' => 'array',
+            'assetnames_name.*' => 'nullable|distinct', // unique:App\Assetname,name doesn't work because the previous names are still in the db when checking this
+        ]);
+        
+        DB::transaction(function () use ($asset, $validatedData) {
+            $asset->location = $validatedData['location'];
+            $asset->stock = $validatedData['stock'];
+
+            // add the category as given by the user
+            $asset->category()->associate(Category::find($validatedData['category']));
+
+            $asset->save();
+
+            // update assetnames
+            for ($i = 0; $i < count($validatedData['assetnames_language']); $i++) {
+                $inputId = $validatedData['assetnames_id'][$i];
+                $inputLanguage = $validatedData['assetnames_language'][$i];
+                $inputName = $validatedData['assetnames_name'][$i];
+                
+                if (!empty($inputId)) {
+                    $assetname = Assetname::find($inputId);
+                    
+                    if (empty($inputName) || empty($inputLanguage)) {
+                        // id exists, name or language empty -> delete
+                        $assetname->delete();
+                    } else {
+                        // id exists, name or language not empty -> update
+                        $assetname->language = $inputLanguage;
+                        $assetname->name = $inputName;
+                        $assetname->save();
+                    }
+                } else if (!empty($inputLanguage) && !empty($inputName)) { // language and name are required
+                    // id doesn't exist, name or language not empty -> insert
+                    $assetname = new Assetname();
+                    $assetname->language = $inputLanguage;
+                    $assetname->name = $inputName;
+                    $asset->assetnames()->save($assetname);
+                }
+            }
+        });
+        
+        return redirect()->route('assets.show', $asset->id);
     }
 
     /**

@@ -99,7 +99,7 @@ class LoanController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Loan  $loan automatic conversion from id in url to model
+     * @param  App\Loan  $loan automatic conversion from id in url to model
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Loan $loan)
