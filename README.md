@@ -32,8 +32,9 @@ that has the loan with the status *Awaiting return*.
 - `composer install` to install all dependencies
 - `cp .env.example .env`
 - `php artisan key:generate`
-- Setup .env file according to your needs
-- `php artisan serve` to start the webserver
+- Setup .env file according to your needs, especially database connection
+- `php artisan migrate`
+- `php artisan serve` to start the development webserver
 
 ## Testing
 - run from the project's root: `./vendor/bin/phpunit`
