@@ -1,5 +1,7 @@
 # Bauassets - Manage loans of assets
 
+Stopped working on this project.
+
 ## Usage
 There is assets (items) that can be part of a loan. For every time a person comes
 to borrow assets, a loan must be created and assets will be assigned to it.
